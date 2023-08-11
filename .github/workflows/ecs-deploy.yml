@@ -19,6 +19,10 @@ jobs:
           aws-access-key-id: 'AKIAQSC74O32TY2STVXS'
           aws-secret-access-key: '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'
           aws-region: us-east-1
+      - name: Login to ECR
+        run: |
+          echo "$(aws ecr get-login-password --region us-east-1)" | docker login --username AWS --password-stdin 038855800565.dkr.ecr.us-east-1.amazonaws.com
+
 
       - name: Build and push Docker image
         run: |
