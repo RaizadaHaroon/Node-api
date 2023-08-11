@@ -16,20 +16,20 @@ jobs:
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: 'AKIAQSC74O32TY2STVXS'
-          aws-secret-access-key: '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'
+          aws-access-key-id: 'AKIAYGKE73FVUU33ZUHC'
+          aws-secret-access-key: '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'
           aws-region: us-east-1
       - name: Login to ECR
         run: |
-          echo "$(aws ecr get-login-password --region us-east-1)" | docker login --username AWS --password-stdin 038855800565.dkr.ecr.us-east-1.amazonaws.com
+          echo "$(aws ecr get-login-password --region us-east-1)" | docker login --username AWS --password-stdin 563322280299.dkr.ecr.us-east-1.amazonaws.com
 
 
       - name: Build and push Docker image
         run: |
           docker build -t my-node-app .
-          docker tag my-node-app:latest 038855800565.dkr.ecr.us-east-1.amazonaws.com/node-api:latest
-          docker push 038855800565.dkr.ecr.us-east-1.amazonaws.com/node-api:latest
+          docker tag my-node-app:latest 563322280299.dkr.ecr.us-east-1.amazonaws.com/test-repo:latest
+          docker push 563322280299.dkr.ecr.us-east-1.amazonaws.com/test-repo:latest
 
       - name: Deploy to ECS
         run: |
-          aws ecs update-service --cluster arn:aws:ecs:us-east-1:038855800565:cluster/testCluster --service arn:aws:ecs:us-east-1:038855800565:service/testCluster/test-service --force-new-deployment
+          aws ecs update-service --cluster arn:aws:ecs:us-east-1:563322280299:cluster/devcluster --service arn:aws:ecs:us-east-1:563322280299:service/devcluster/task-service --force-new-deployment
