@@ -1,0 +1,31 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: 'AKIAQSC74O32TY2STVXS'
+          aws-secret-access-key: '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'
+          aws-region: us-east-1
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t my-node-app .
+          docker tag my-node-app:latest 038855800565.dkr.ecr.us-east-1.amazonaws.com/node-api:latest
+          docker push 038855800565.dkr.ecr.us-east-1.amazonaws.com/node-api:latest
+
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service --cluster arn:aws:ecs:us-east-1:038855800565:cluster/testCluster --service arn:aws:ecs:us-east-1:038855800565:service/testCluster/test-service --force-new-deployment
